@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# https://chat.openai.com/share/1b4bcd84-0a6a-4e70-aff9-e1fa363c2e46
+
 # Function to display confirmation prompt
 confirm() {
   if [[ $auto_accept == "a" ]]; then
