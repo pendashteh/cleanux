@@ -42,6 +42,9 @@ display_task_detailed_help() {
 # Array to store task file names
 task_files=()
 
+# Task directory
+task_dir="tasks"
+
 # Display brief help for all tasks
 echo -e "\e[1mCleanux - System Cleanup Utility\e[0m"
 echo "--------------------------------------"
@@ -49,7 +52,7 @@ echo -e "\e[1mAvailable Tasks:\e[0m"
 echo
 
 i=1
-for task_script in *"$task_suffix"; do
+for task_script in "$task_dir"/*"$task_suffix"; do
     if [[ -f "$task_script" ]]; then
         display_task_brief_help "$i" "$task_script"
         echo
