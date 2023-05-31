@@ -12,7 +12,8 @@ execute_cleanup_step() {
 
     echo -e "\n\e[1mRunning cleanup step: $step_name\e[0m"
     echo "-----------------------------------------------"
-    bash "$step_script"
+    source "$step_script"
+    run
     echo "-----------------------------------------------"
 }
 
@@ -23,8 +24,8 @@ display_task_brief_help() {
 
     local task_name=$(basename "$task_script" "$task_suffix")
     local task_description=""
-    source "$task_script" <<< "$(declare -p description)"
-    task_description="${description#*=}"
+    source "$task_script"
+    task_description="${description}"
 
     echo -e "$task_num. \e[1mTask: $task_name\e[0m"
     echo "- $task_description"
@@ -34,7 +35,8 @@ display_task_brief_help() {
 display_task_detailed_help() {
     local task_script=$1
 
-    bash "$task_script" --help
+    source "$task_script"
+    display_help
 }
 
 # Array to store task file names
@@ -76,11 +78,13 @@ fi
 # Execute the selected task(s) or all tasks
 if (( task_num == i )); then
     for task_script in "${task_files[@]}"; do
-        execute_cleanup_step "$(basename "$task_script" "$task_suffix")" "$task_script"
+        task_name=$(basename "$task_script" "$task_suffix")
+        execute_cleanup_step "$task_name" "$task_script"
     done
 else
     task_script="${task_files[$((task_num-1))]}"
-    execute_cleanup_step "$task_num" "$task_script"
+    task_name=$(basename "$task_script" "$task_suffix")
+    execute_cleanup_step "$task_name" "$task_script"
 fi
 
 echo -e "\n\e[1mCleanup process completed.\e[0m"

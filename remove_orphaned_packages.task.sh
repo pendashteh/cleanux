@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Purpose: Identify and remove orphaned packages that are no longer required by any installed software.
+description="Identify and remove orphaned packages that are no longer required by any installed software."
 
 # Function to remove orphaned packages
-remove_orphaned_packages() {
+run() {
     sudo deborphan | xargs sudo apt-get -y remove --purge
 }
 
@@ -19,10 +19,3 @@ display_help() {
     echo "  --help  Display this help message."
     echo
 }
-
-# Check if the help option is provided
-if [[ "$1" == "--help" ]]; then
-    display_help
-else
-    remove_orphaned_packages
-fi

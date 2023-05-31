@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Purpose: Clean up the APT cache by removing downloaded package files that are no longer needed.
+description="Clean up the APT cache by removing downloaded package files that are no longer needed."
 
 # Function to clean up APT cache
-clean_up_apt_cache() {
+run() {
     sudo apt-get clean
 }
 
@@ -19,10 +19,3 @@ display_help() {
     echo "  --help  Display this help message."
     echo
 }
-
-# Check if the help option is provided
-if [[ "$1" == "--help" ]]; then
-    display_help
-else
-    clean_up_apt_cache
-fi

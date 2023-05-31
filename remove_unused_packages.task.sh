@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Purpose: Remove unused packages and their associated configuration files.
+description="Remove unused packages and their associated configuration files."
 
 # Function to remove unused packages and their associated configuration files
-remove_unused_packages() {
+run() {
     sudo apt autoremove --purge -y
 }
 
@@ -19,10 +19,3 @@ display_help() {
     echo "  --help  Display this help message."
     echo
 }
-
-# Check if the help option is provided
-if [[ "$1" == "--help" ]]; then
-    display_help
-else
-    remove_unused_packages
-fi

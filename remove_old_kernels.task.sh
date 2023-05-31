@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Purpose: Remove old kernel packages that are no longer in use.
+description="Remove old kernel packages that are no longer in use."
 
 # Function to remove old kernel packages
-remove_old_kernels() {
+run() {
     sudo apt autoremove --purge -y
     sudo apt install byobu # Ensure a package is installed after removing the kernel
 }
@@ -20,10 +20,3 @@ display_help() {
     echo "  --help  Display this help message."
     echo
 }
-
-# Check if the help option is provided
-if [[ "$1" == "--help" ]]; then
-    display_help
-else
-    remove_old_kernels
-fi

@@ -1,9 +1,12 @@
 #!/bin/bash
 
-# Purpose: Clear the cache of downloaded packages stored in the APT package cache.
+
+# Description variable for the task
+description="Sample Task - Description of what this task does"
 
 # Function to clear package cache
-clear_package_cache() {
+run() {
+    echo CLEARING NOW!
     sudo apt clean
 }
 
@@ -19,10 +22,3 @@ display_help() {
     echo "  --help  Display this help message."
     echo
 }
-
-# Check if the help option is provided
-if [[ "$1" == "--help" ]]; then
-    display_help
-else
-    clear_package_cache
-fi
