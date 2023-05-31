@@ -7,11 +7,10 @@ execute_cleanup_step() {
     local step_name=$1
     local step_script=$2
     
-    echo "Running cleanup step: $step_name"
-    echo "---------------------------------"
+    echo -e "\n\e[1mRunning cleanup step: $step_name\e[0m"
+    echo "-----------------------------------------------"
     bash "$step_script"
-    echo "---------------------------------"
-    echo
+    echo "-----------------------------------------------"
 }
 
 # Function to display help for a task
@@ -21,16 +20,43 @@ display_task_help() {
     bash "$task_script" --help
 }
 
-# Find all task files with pattern "*.task.sh" and execute them
+# Display overview of tasks and usage instructions
+echo -e "\e[1mCleanux - System Cleanup Utility\e[0m"
+echo "--------------------------------------"
+echo -e "\e[1mOverview of Tasks:\e[0m"
+echo
+
 for task_script in *.task.sh; do
     if [[ -f "$task_script" ]]; then
-        echo "-------------------------------------------------------------------------"
-        echo "$(basename "$task_script" .task.sh)"
-        echo "-------------------------------------------------------------------------"
-        bash "$task_script" --help
+        echo -e "\e[1m$(basename "$task_script" .task.sh)\e[0m"
+        bash "$task_script" --help | sed 's/^/  /'
         echo
-        execute_cleanup_step "$(basename "$task_script" .task.sh)" "$task_script"
     fi
 done
 
-echo "Cleanup process completed."
+# Prompt to select individual tasks or run all
+echo -e "\e[1mUsage Instructions:\e[0m"
+echo "To run individual tasks, use the following format:"
+echo "  ./cleanux.sh [task_name]"
+echo
+echo "To run all tasks, simply execute the script without any arguments:"
+echo "  ./cleanux.sh"
+
+# Execute selected tasks or run all tasks
+if [[ $# -eq 0 ]]; then
+    for task_script in *.task.sh; do
+        if [[ -f "$task_script" ]]; then
+            execute_cleanup_step "$(basename "$task_script" .task.sh)" "$task_script"
+        fi
+    done
+else
+    for task_script in "$@"; do
+        if [[ -f "$task_script.task.sh" ]]; then
+            execute_cleanup_step "$task_script" "$task_script.task.sh"
+        else
+            echo -e "\n\e[1mTask not found: $task_script\e[0m"
+        fi
+    done
+fi
+
+echo -e "\n\e[1mCleanup process completed.\e[0m"
