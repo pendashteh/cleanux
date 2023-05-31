@@ -1,35 +1,51 @@
-# Cleanux - Ubuntu System Cleanup Script
+---
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+# Cleanux
 
-> A bash script to clean up an Ubuntu system by removing unnecessary packages and freeing up disk space.
-
-Cleanux is a simple bash script designed specifically for Ubuntu systems. It automates the process of cleaning up your system by removing unnecessary packages, clearing package cache, removing old kernels, cleaning up APT cache, removing orphaned packages, cleaning up old configuration files, and removing unused packages and their associated configuration files.
-
-## Features
-
-- Interactive prompts with confirmation for each cleanup step
-- Automatic cleanup option with the `-a` flag
-- Human-readable output showing the amount of saved disk space
-- Error handling for cases when there are no packages to purge
+Cleanux is a command-line utility for cleaning up and optimizing Ubuntu systems. It provides a set of cleanup steps to remove unnecessary packages, clear cache, remove old kernels, clean up APT cache, remove orphaned packages, clean up old configuration files, and remove unused packages and their associated configuration files. Cleanux helps improve disk space utilization and system performance by removing non-useful system files.
 
 ## Usage
 
-To use Cleanux, follow these steps:
+To run Cleanux and perform the system cleanup, follow these steps:
 
-1. Ensure that you have the necessary permissions to execute the script.
+1. Open a terminal on your Ubuntu system.
 
-2. Run the script in one of the following modes:
+2. Navigate to the directory where you saved the Cleanux script.
 
-   - Interactive mode: `./cleanux.sh`
-   - Automatic mode (accepts all prompts without confirmation): `./cleanux.sh -a`
+3. Run the script to execute Cleanux.
 
-3. Follow the prompts to confirm or skip each cleanup step.
+4. Follow the on-screen prompts to confirm or skip each cleanup step.
 
-## Credits
+5. Cleanux will display the amount of disk space saved after each successful cleanup step.
 
-This script is built upon the original work by OpenAI and has been modified for specific needs. OpenAI's contributions are much appreciated.
+6. Once the cleanup process is complete, Cleanux will display a message indicating the completion of the cleanup.
+
+## Cleanup Steps
+
+Cleanux performs the following cleanup steps to optimize your Ubuntu system:
+
+1. Remove Unnecessary Packages: This step removes unnecessary packages that are no longer required by any installed software.
+
+2. Clear Package Cache: This step clears the cache of downloaded packages stored in the APT package cache.
+
+3. Remove Old Kernels: This step removes old kernel packages that are no longer in use.
+
+4. Clean Up APT Cache: This step cleans up the APT cache by removing downloaded package files that are no longer needed.
+
+5. Remove Orphaned Packages: This step identifies and removes orphaned packages that are no longer required by any installed software.
+
+6. Clean Up Old Configuration Files: This step removes old configuration files associated with packages that have been removed but not purged.
+
+7. Remove Unused Packages and Configuration Files: This step removes unused packages and their associated configuration files.
+
+## Contributing
+
+Cleanux is an open-source project, and contributions are welcome. If you encounter any issues, have suggestions for improvements, or would like to contribute to the project, please visit the Cleanux GitHub repository.
 
 ## License
 
-Cleanux is licensed under the [MIT License](LICENSE).
+Cleanux is released under the MIT License.
+
+---
+
+Feel free to modify the document according to your specific project details and requirements.
