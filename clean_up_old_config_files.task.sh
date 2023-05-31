@@ -2,7 +2,14 @@
 
 # Function to clean up old configuration files
 clean_up_old_config_files() {
-    sudo dpkg --purge $(dpkg -l | grep '^rc' | awk '{print $2}')
+    local config_files="$(dpkg -l | grep '^rc' | awk '{print $2}')"
+
+    if [[ -z "$config_files" ]]; then
+        echo "No old configuration files to clean up."
+        return
+    fi
+
+    sudo dpkg --purge $config_files
 }
 
 # Function to display help message
