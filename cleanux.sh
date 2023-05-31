@@ -24,6 +24,11 @@ display_task_help() {
 # Find all task files with pattern "*.task.sh" and execute them
 for task_script in *.task.sh; do
     if [[ -f "$task_script" ]]; then
+        echo "-------------------------------------------------------------------------"
+        echo "$(basename "$task_script" .task.sh)"
+        echo "-------------------------------------------------------------------------"
+        bash "$task_script" --help
+        echo
         execute_cleanup_step "$(basename "$task_script" .task.sh)" "$task_script"
     fi
 done
