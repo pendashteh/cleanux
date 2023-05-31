@@ -24,13 +24,6 @@ execute_cleanup_step() {
     echo "$run_definition"
     echo "-----------------------------------------------"
 
-    # Prompt for confirmation before executing the task
-    read -rp "Are you sure you want to execute this task? (y/n): " confirm
-    if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
-        echo "Task execution skipped."
-        return
-    fi
-
     run
     echo "-----------------------------------------------"
 }
@@ -84,20 +77,22 @@ echo -e "$i. \e[1mTask: All\e[0m"
 echo "- Run all tasks"
 
 # Prompt to select the task to execute
-read -p "Enter the number of the task to execute (or 'q' to quit): " task_num
+read -p "Enter the number of the task to execute (or 'all' to run all tasks, or 'q' to quit): " task_num
 if [[ "$task_num" == "q" ]]; then
     echo -e "\n\e[1mCleanup process aborted.\e[0m"
     exit 0
 fi
 
-# Validate the task number
-if ! [[ "$task_num" =~ ^[0-9]+$ ]] || (( task_num < 1 || task_num > i )); then
-    echo -e "\n\e[1mInvalid task number. Cleanup process aborted.\e[0m"
-    exit 1
+# Validate the task number or selection
+if [[ "$task_num" != "all" ]]; then
+    if ! [[ "$task_num" =~ ^[0-9]+$ ]] || (( task_num < 1 || task_num > i )); then
+        echo -e "\n\e[1mInvalid task number or selection. Cleanup process aborted.\e[0m"
+        exit 1
+    fi
 fi
 
 # Execute the selected task(s) or all tasks
-if (( task_num == i )); then
+if [[ "$task_num" == "all" ]]; then
     for task_script in "${task_files[@]}"; do
         task_name=$(basename "$task_script" "$task_suffix")
         execute_cleanup_step "$task_name" "$task_script"
