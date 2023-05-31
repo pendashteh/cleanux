@@ -29,10 +29,29 @@ calculate_disk_space() {
   echo
 }
 
+# Function to display confirmation prompt and check if there are packages to purge
+confirm_with_purge_check() {
+  local command=$1
+  local purge_check_command=$2
+
+  if ! eval "$purge_check_command"; then
+    echo "$(tput setaf 1)No packages to purge.$(tput sgr0)"
+    echo
+    return 1
+  fi
+
+  if confirm "$command"; then
+    return 0
+  fi
+
+  return 1
+}
+
 # Function to remove unnecessary packages
 remove_unnecessary_packages() {
   local command="sudo apt autoremove"
-  if confirm "$command"; then
+  local purge_check_command="dpkg -l | awk '/^rc/ { print \$2 }' | grep -q '.'"
+  if confirm_with_purge_check "$command" "$purge_check_command"; then
     calculate_disk_space "/" "$command"
   fi
 }
@@ -48,7 +67,8 @@ clear_package_cache() {
 # Function to remove old kernels
 remove_old_kernels() {
   local command="sudo apt autoremove --purge"
-  if confirm "$command"; then
+  local purge_check_command="dpkg -l | awk '/^rc/ { print \$2 }' | grep -q '.'"
+  if confirm_with_purge_check "$command" "$purge_check_command"; then
     calculate_disk_space "/" "$command"
   fi
 }
@@ -81,7 +101,8 @@ remove_orphaned_packages() {
 
   if command -v deborphan &> /dev/null; then
     local command="deborphan | xargs sudo apt-get -y remove --purge"
-    if confirm "$command"; then
+    local purge_check_command="dpkg -l | awk '/^rc/ { print \$2 }' | grep -q '.'"
+    if confirm_with_purge_check "$command" "$purge_check_command"; then
       calculate_disk_space "/" "$command"
     fi
   fi
@@ -90,7 +111,8 @@ remove_orphaned_packages() {
 # Function to clean up old configuration files
 clean_up_old_config_files() {
   local command="sudo dpkg --purge \$(dpkg -l | awk '/^rc/ { print \$2 }')"
-  if confirm "$command"; then
+  local purge_check_command="dpkg -l | awk '/^rc/ { print \$2 }' | grep -q '.'"
+  if confirm_with_purge_check "$command" "$purge_check_command"; then
     calculate_disk_space "/" "$command"
   fi
 }
@@ -98,7 +120,8 @@ clean_up_old_config_files() {
 # Function to remove unused packages and their associated configuration files
 remove_unused_packages() {
   local command="sudo apt-get autoremove --purge"
-  if confirm "$command"; then
+  local purge_check_command="dpkg -l | awk '/^rc/ { print \$2 }' | grep -q '.'"
+  if confirm_with_purge_check "$command" "$purge_check_command"; then
     calculate_disk_space "/" "$command"
   fi
 }
