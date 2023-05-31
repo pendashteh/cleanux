@@ -2,7 +2,8 @@
 
 # Function to display confirmation prompt
 confirm() {
-  read -p "$1 (y/n): " -n 1 -r
+  echo "$(tput setaf 3)Executing command: $1$(tput sgr0)"
+  read -p "$(tput setaf 6)Are you sure you want to proceed? (y/n): $(tput sgr0)" -n 1 -r
   echo
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     return 0
@@ -12,47 +13,57 @@ confirm() {
 
 # Function to calculate disk space before and after a command
 calculate_disk_space() {
-  before=$(df -h --output=avail "$1" | sed -n 2p)
+  before=$(df -h --output=avail "$1" | sed -n 2p | awk '{print $1}')
+  echo
+  echo "$(tput setaf 3)Executing command: $2$(tput sgr0)"
+  echo
   $2
-  after=$(df -h --output=avail "$1" | sed -n 2p)
-  echo "Saved space: $((before-after))K"
+  after=$(df -h --output=avail "$1" | sed -n 2p | awk '{print $1}')
+  saved=$(bc <<< "$before - $after")
+  echo "$(tput setaf 2)Saved space: $saved$(tput sgr0)"
   echo
 }
 
 # Remove unnecessary packages
-if confirm "Remove unnecessary packages?"; then
-  calculate_disk_space "/" "sudo apt autoremove"
+command="sudo apt autoremove"
+if confirm "$command"; then
+  calculate_disk_space "/" "$command"
 fi
 
 # Clear package cache
-if confirm "Clear package cache?"; then
-  calculate_disk_space "/" "sudo apt clean"
+command="sudo apt clean"
+if confirm "$command"; then
+  calculate_disk_space "/" "$command"
 fi
 
 # Remove old kernels
-if confirm "Remove old kernels?"; then
-  calculate_disk_space "/" "sudo apt autoremove --purge"
+command="sudo apt autoremove --purge"
+if confirm "$command"; then
+  calculate_disk_space "/" "$command"
 fi
 
 # Clean up APT cache
-if confirm "Clean up APT cache?"; then
-  calculate_disk_space "/" "sudo apt-get clean"
+command="sudo apt-get clean"
+if confirm "$command"; then
+  calculate_disk_space "/" "$command"
 fi
 
 # Remove orphaned packages
-if confirm "Remove orphaned packages?"; then
-  calculate_disk_space "/" "deborphan | xargs sudo apt-get -y remove --purge"
+command="deborphan | xargs sudo apt-get -y remove --purge"
+if confirm "$command"; then
+  calculate_disk_space "/" "$command"
 fi
 
 # Clean up old configuration files
-if confirm "Clean up old configuration files?"; then
-  calculate_disk_space "/" "sudo dpkg --purge \$(COLUMNS=200 dpkg -l | grep \"^rc\" | tr -s ' ' | cut -d ' ' -f 2)"
+command="sudo dpkg --purge \$(COLUMNS=200 dpkg -l | grep \"^rc\" | tr -s ' ' | cut -d ' ' -f 2)"
+if confirm "$command"; then
+  calculate_disk_space "/" "$command"
 fi
 
 # Remove unused packages and their associated configuration files
-if confirm "Remove unused packages and associated configuration files?"; then
-  calculate_disk_space "/" "sudo apt-get autoremove --purge"
+command="sudo apt-get autoremove --purge"
+if confirm "$command"; then
+  calculate_disk_space "/" "$command"
 fi
 
-echo "Cleanup complete!"
-
+echo "$(tput setaf 6)Cleanup complete!$(tput sgr0)"
