@@ -12,6 +12,14 @@ execute_cleanup_step() {
 
     echo -e "\n\e[1mRunning cleanup step: $step_name\e[0m"
     echo "-----------------------------------------------"
+
+    # Prompt for confirmation before executing the task
+    read -rp "Are you sure you want to execute this task? (y/n): " confirm
+    if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
+        echo "Task execution skipped."
+        return
+    fi
+
     source "$step_script"
     run
     echo "-----------------------------------------------"
