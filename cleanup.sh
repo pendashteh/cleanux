@@ -2,10 +2,17 @@
 
 # Function to display confirmation prompt
 confirm() {
+  if [[ $auto_accept == "a" ]]; then
+    return 0
+  fi
+
   echo "$(tput setaf 3)Executing command: $1$(tput sgr0)"
-  read -p "$(tput setaf 6)Are you sure you want to proceed? (y/n): $(tput sgr0)" -n 1 -r
+  read -p "$(tput setaf 6)Are you sure you want to proceed? (y/n/a): $(tput sgr0)" -n 1 -r
   echo
   if [[ $REPLY =~ ^[Yy]$ ]]; then
+    return 0
+  elif [[ $REPLY =~ ^[Aa]$ ]]; then
+    auto_accept="a"
     return 0
   fi
   return 1
@@ -19,10 +26,16 @@ calculate_disk_space() {
   echo
   eval "$2"
   after=$(df -h --output=avail "$1" | sed -n 2p | awk '{print $1}')
-  saved=$(bc <<< "$before - $after")
-  echo "$(tput setaf 2)Saved space: $saved$(tput sgr0)"
+  saved=$(echo "$before - $after" | bc)
+  saved_formatted=$(numfmt --to=iec-i --suffix=B "$saved")
+  echo "$(tput setaf 2)Saved space: $saved_formatted$(tput sgr0)"
   echo
 }
+
+auto_accept=""
+if [[ $1 == "-a" ]]; then
+  auto_accept="a"
+fi
 
 # Remove unnecessary packages
 command="sudo apt autoremove"
