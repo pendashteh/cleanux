@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Purpose: Remove old kernel packages that are no longer in use.
+
 # Function to remove old kernel packages
 remove_old_kernels() {
     sudo apt autoremove --purge -y

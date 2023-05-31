@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Purpose: Remove unused packages and their associated configuration files.
+
 # Function to remove unused packages and their associated configuration files
 remove_unused_packages() {
     sudo apt autoremove --purge -y

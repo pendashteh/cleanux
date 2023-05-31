@@ -18,11 +18,10 @@ display_task_brief_help() {
     local task_script=$1
     
     local task_name=$(basename "$task_script" .task.sh)
-    local task_desc=$(grep -oP '(?<=^# Purpose: ).*' "$task_script" | sed -e 's/^/  /')
+    local task_desc=$(grep -oP '(?<=^# Purpose: ).*' "$task_script" | sed -e 's/^/  - /')
     
     echo -e "\e[1m$task_name\e[0m"
     echo "$task_desc"
-    echo
 }
 
 # Function to display detailed help for a task
@@ -36,7 +35,6 @@ display_task_detailed_help() {
 echo -e "\e[1mCleanux - System Cleanup Utility\e[0m"
 echo "--------------------------------------"
 echo -e "\e[1mOverview of Tasks:\e[0m"
-echo
 
 for task_script in *.task.sh; do
     if [[ -f "$task_script" ]]; then

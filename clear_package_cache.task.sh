@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Purpose: Clear the cache of downloaded packages stored in the APT package cache.
+
 # Function to clear package cache
 clear_package_cache() {
     sudo apt clean

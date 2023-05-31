@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Purpose: Remove old configuration files associated with packages that have been removed but not purged.
+
 # Function to clean up old configuration files
 clean_up_old_config_files() {
     local config_files="$(dpkg -l | grep '^rc' | awk '{print $2}')"

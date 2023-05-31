@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Purpose: Remove unnecessary packages that are no longer required by any installed software.
+
 # Function to remove unnecessary packages
 remove_unnecessary_packages() {
     sudo apt autoremove --purge -y

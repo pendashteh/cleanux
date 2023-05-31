@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Purpose: Identify and remove orphaned packages that are no longer required by any installed software.
+
 # Function to remove orphaned packages
 remove_orphaned_packages() {
     sudo deborphan | xargs sudo apt-get -y remove --purge
