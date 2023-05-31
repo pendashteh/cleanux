@@ -2,11 +2,14 @@
 
 # Cleanux - System Cleanup Utility
 
+# Define task script suffix
+task_suffix='.task.sh'
+
 # Function to execute a cleanup step
 execute_cleanup_step() {
     local step_name=$1
     local step_script=$2
-    
+
     echo -e "\n\e[1mRunning cleanup step: $step_name\e[0m"
     echo "-----------------------------------------------"
     bash "$step_script"
@@ -15,64 +18,69 @@ execute_cleanup_step() {
 
 # Function to display brief help for a task
 display_task_brief_help() {
-    local task_script=$1
-    
-    local task_name=$(basename "$task_script" .task.sh)
-    local task_desc=$(grep -oP '(?<=^# Purpose: ).*' "$task_script" | sed -e 's/^/  - /')
-    
-    echo -e "\e[1m$task_name\e[0m"
-    echo "$task_desc"
+    local task_num=$1
+    local task_script=$2
+
+    local task_name=$(basename "$task_script" "$task_suffix")
+    local task_description=""
+    source "$task_script" <<< "$(declare -p description)"
+    task_description="${description#*=}"
+
+    echo -e "$task_num. \e[1mTask: $task_name\e[0m"
+    echo "- $task_description"
 }
 
 # Function to display detailed help for a task
 display_task_detailed_help() {
     local task_script=$1
-    
+
     bash "$task_script" --help
 }
+
+# Array to store task file names
+task_files=()
 
 # Display brief help for all tasks
 echo -e "\e[1mCleanux - System Cleanup Utility\e[0m"
 echo "--------------------------------------"
-echo -e "\e[1mOverview of Tasks:\e[0m"
+echo -e "\e[1mAvailable Tasks:\e[0m"
+echo
 
-for task_script in *.task.sh; do
+i=1
+for task_script in *"$task_suffix"; do
     if [[ -f "$task_script" ]]; then
-        display_task_brief_help "$task_script"
+        display_task_brief_help "$i" "$task_script"
+        echo
+        task_files+=("$task_script")
+        ((i++))
     fi
 done
 
-# Function to display more help for a task
-display_task_more_help() {
-    local task_script=$1
-    
-    echo -e "\n\e[1mMore Help:\e[0m"
-    display_task_detailed_help "$task_script"
-}
+# Display the option to run all tasks
+echo -e "$i. \e[1mTask: All\e[0m"
+echo "- Run all tasks"
 
-# Prompt to run individual tasks or all tasks
-echo -e "\e[1mUsage Instructions:\e[0m"
-echo "To run individual tasks, use the following format:"
-echo "  ./cleanux.sh [task_name]"
-echo
-echo "To run all tasks, use the following command:"
-echo "  ./cleanux.sh --all"
+# Prompt to select the task to execute
+read -p "Enter the number of the task to execute (or 'q' to quit): " task_num
+if [[ "$task_num" == "q" ]]; then
+    echo -e "\n\e[1mCleanup process aborted.\e[0m"
+    exit 0
+fi
 
-# Execute selected tasks or run all tasks
-if [[ "$1" == "--all" ]]; then
-    for task_script in *.task.sh; do
-        if [[ -f "$task_script" ]]; then
-            execute_cleanup_step "$(basename "$task_script" .task.sh)" "$task_script"
-        fi
+# Validate the task number
+if ! [[ "$task_num" =~ ^[0-9]+$ ]] || (( task_num < 1 || task_num > i )); then
+    echo -e "\n\e[1mInvalid task number. Cleanup process aborted.\e[0m"
+    exit 1
+fi
+
+# Execute the selected task(s) or all tasks
+if (( task_num == i )); then
+    for task_script in "${task_files[@]}"; do
+        execute_cleanup_step "$(basename "$task_script" "$task_suffix")" "$task_script"
     done
-elif [[ -n "$1" ]]; then
-    task_script="$1.task.sh"
-    if [[ -f "$task_script" ]]; then
-        execute_cleanup_step "$1" "$task_script"
-    else
-        echo -e "\n\e[1mTask not found: $1\e[0m"
-        display_task_more_help "$task_script"
-    fi
+else
+    task_script="${task_files[$((task_num-1))]}"
+    execute_cleanup_step "$task_num" "$task_script"
 fi
 
 echo -e "\n\e[1mCleanup process completed.\e[0m"
