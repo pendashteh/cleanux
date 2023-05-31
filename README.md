@@ -1,10 +1,10 @@
-# Ubuntu System Cleanup Script
+# Cleanux - Ubuntu System Cleanup Script
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > A bash script to clean up an Ubuntu system by removing unnecessary packages and freeing up disk space.
 
-The Ubuntu System Cleanup Script is a simple bash script that automates the process of cleaning up an Ubuntu system by removing unnecessary packages, clearing package cache, removing old kernels, cleaning up APT cache, removing orphaned packages, cleaning up old configuration files, and removing unused packages and their associated configuration files.
+Cleanux is a simple bash script designed specifically for Ubuntu systems. It automates the process of cleaning up your system by removing unnecessary packages, clearing package cache, removing old kernels, cleaning up APT cache, removing orphaned packages, cleaning up old configuration files, and removing unused packages and their associated configuration files.
 
 ## Features
 
@@ -15,14 +15,14 @@ The Ubuntu System Cleanup Script is a simple bash script that automates the proc
 
 ## Usage
 
-To use the script, follow these steps:
+To use Cleanux, follow these steps:
 
 1. Ensure that you have the necessary permissions to execute the script.
 
 2. Run the script in one of the following modes:
 
-   - Interactive mode: `./cleanup_script.sh`
-   - Automatic mode (accepts all prompts without confirmation): `./cleanup_script.sh -a`
+   - Interactive mode: `./cleanux.sh`
+   - Automatic mode (accepts all prompts without confirmation): `./cleanux.sh -a`
 
 3. Follow the prompts to confirm or skip each cleanup step.
 
@@ -32,4 +32,4 @@ This script is built upon the original work by OpenAI and has been modified for 
 
 ## License
 
-The Ubuntu System Cleanup Script is licensed under the [MIT License](LICENSE).
+Cleanux is licensed under the [MIT License](LICENSE).
