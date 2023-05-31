@@ -34,16 +34,16 @@ for task_script in *.task.sh; do
     fi
 done
 
-# Prompt to select individual tasks or run all
+# Prompt to run individual tasks or all tasks
 echo -e "\e[1mUsage Instructions:\e[0m"
 echo "To run individual tasks, use the following format:"
 echo "  ./cleanux.sh [task_name]"
 echo
-echo "To run all tasks, simply execute the script without any arguments:"
-echo "  ./cleanux.sh"
+echo "To run all tasks, use the following command:"
+echo "  ./cleanux.sh --all"
 
 # Execute selected tasks or run all tasks
-if [[ $# -eq 0 ]]; then
+if [[ "$1" == "--all" ]]; then
     for task_script in *.task.sh; do
         if [[ -f "$task_script" ]]; then
             execute_cleanup_step "$(basename "$task_script" .task.sh)" "$task_script"
@@ -53,7 +53,7 @@ else
     for task_script in "$@"; do
         if [[ -f "$task_script.task.sh" ]]; then
             execute_cleanup_step "$task_script" "$task_script.task.sh"
-        else
+        elif [[ "$task_script" != "--all" ]]; then
             echo -e "\n\e[1mTask not found: $task_script\e[0m"
         fi
     done
