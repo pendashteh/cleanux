@@ -1,5 +1,3 @@
----
-
 # Cleanux
 
 Cleanux is a command-line utility for cleaning up and optimizing Ubuntu systems. It provides a set of cleanup steps to remove unnecessary packages, clear cache, remove old kernels, clean up APT cache, remove orphaned packages, clean up old configuration files, and remove unused packages and their associated configuration files. Cleanux helps improve disk space utilization and system performance by removing non-useful system files.
@@ -45,7 +43,3 @@ Cleanux is an open-source project, and contributions are welcome. If you encount
 ## License
 
 Cleanux is released under the MIT License.
-
----
-
-Feel free to modify the document according to your specific project details and requirements.
