@@ -36,10 +36,10 @@ Cleanux performs the following cleanup steps to optimize your Ubuntu system:
 
 7. Remove Unused Packages and Configuration Files: This step removes unused packages and their associated configuration files.
 
-## Contributing
+# Credits
 
-Cleanux is an open-source project, and contributions are welcome. If you encounter any issues, have suggestions for improvements, or would like to contribute to the project, please visit the Cleanux GitHub repository.
+Cleanux is written entirely by ChatGPT 3.5. Including this README file.
 
 ## License
 
-Cleanux is released under the MIT License.
+Cleanux is released under GPL v3.
