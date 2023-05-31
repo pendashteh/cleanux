@@ -13,6 +13,17 @@ execute_cleanup_step() {
     echo -e "\n\e[1mRunning cleanup step: $step_name\e[0m"
     echo "-----------------------------------------------"
 
+    # Source the task script
+    source "$step_script"
+
+    # Get the definition of the run function
+    local run_definition=$(declare -f run)
+
+    # Display the code of the task
+    echo -e "\e[1mCode to be executed:\e[0m"
+    echo "$run_definition"
+    echo "-----------------------------------------------"
+
     # Prompt for confirmation before executing the task
     read -rp "Are you sure you want to execute this task? (y/n): " confirm
     if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
@@ -20,7 +31,6 @@ execute_cleanup_step() {
         return
     fi
 
-    source "$step_script"
     run
     echo "-----------------------------------------------"
 }
