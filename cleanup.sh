@@ -52,7 +52,12 @@ fi
 # Remove old kernels
 command="sudo apt autoremove --purge"
 if confirm "$command"; then
-  calculate_disk_space "/" "$command"
+  if dpkg -l | awk '/^rc/ { print $2 }' | grep -q "."; then
+    calculate_disk_space "/" "$command"
+  else
+    echo "$(tput setaf 1)No packages to purge.$(tput sgr0)"
+    echo
+  fi
 fi
 
 # Clean up APT cache
@@ -70,7 +75,12 @@ fi
 # Clean up old configuration files
 command="sudo dpkg --purge \$(dpkg -l | awk '/^rc/ { print \$2 }')"
 if confirm "$command"; then
-  calculate_disk_space "/" "$command"
+  if dpkg -l | awk '/^rc/ { print $2 }' | grep -q "."; then
+    calculate_disk_space "/" "$command"
+  else
+    echo "$(tput setaf 1)No packages to purge.$(tput sgr0)"
+    echo
+  fi
 fi
 
 # Remove unused packages and their associated configuration files
