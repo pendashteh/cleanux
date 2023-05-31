@@ -17,7 +17,7 @@ calculate_disk_space() {
   echo
   echo "$(tput setaf 3)Executing command: $2$(tput sgr0)"
   echo
-  $2
+  eval "$2"
   after=$(df -h --output=avail "$1" | sed -n 2p | awk '{print $1}')
   saved=$(bc <<< "$before - $after")
   echo "$(tput setaf 2)Saved space: $saved$(tput sgr0)"
@@ -55,7 +55,7 @@ if confirm "$command"; then
 fi
 
 # Clean up old configuration files
-command="sudo dpkg --purge \$(COLUMNS=200 dpkg -l | grep \"^rc\" | tr -s ' ' | cut -d ' ' -f 2)"
+command="sudo dpkg --purge \$(dpkg -l | awk '/^rc/ { print \$2 }')"
 if confirm "$command"; then
   calculate_disk_space "/" "$command"
 fi
