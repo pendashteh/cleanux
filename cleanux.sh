@@ -13,14 +13,26 @@ execute_cleanup_step() {
     echo "-----------------------------------------------"
 }
 
-# Function to display help for a task
-display_task_help() {
+# Function to display brief help for a task
+display_task_brief_help() {
+    local task_script=$1
+    
+    local task_name=$(basename "$task_script" .task.sh)
+    local task_desc=$(grep -oP '(?<=^# Purpose: ).*' "$task_script" | sed -e 's/^/  /')
+    
+    echo -e "\e[1m$task_name\e[0m"
+    echo "$task_desc"
+    echo
+}
+
+# Function to display detailed help for a task
+display_task_detailed_help() {
     local task_script=$1
     
     bash "$task_script" --help
 }
 
-# Display overview of tasks and usage instructions
+# Display brief help for all tasks
 echo -e "\e[1mCleanux - System Cleanup Utility\e[0m"
 echo "--------------------------------------"
 echo -e "\e[1mOverview of Tasks:\e[0m"
@@ -28,11 +40,17 @@ echo
 
 for task_script in *.task.sh; do
     if [[ -f "$task_script" ]]; then
-        echo -e "\e[1m$(basename "$task_script" .task.sh)\e[0m"
-        bash "$task_script" --help | sed 's/^/  /'
-        echo
+        display_task_brief_help "$task_script"
     fi
 done
+
+# Function to display more help for a task
+display_task_more_help() {
+    local task_script=$1
+    
+    echo -e "\n\e[1mMore Help:\e[0m"
+    display_task_detailed_help "$task_script"
+}
 
 # Prompt to run individual tasks or all tasks
 echo -e "\e[1mUsage Instructions:\e[0m"
@@ -49,14 +67,14 @@ if [[ "$1" == "--all" ]]; then
             execute_cleanup_step "$(basename "$task_script" .task.sh)" "$task_script"
         fi
     done
-else
-    for task_script in "$@"; do
-        if [[ -f "$task_script.task.sh" ]]; then
-            execute_cleanup_step "$task_script" "$task_script.task.sh"
-        elif [[ "$task_script" != "--all" ]]; then
-            echo -e "\n\e[1mTask not found: $task_script\e[0m"
-        fi
-    done
+elif [[ -n "$1" ]]; then
+    task_script="$1.task.sh"
+    if [[ -f "$task_script" ]]; then
+        execute_cleanup_step "$1" "$task_script"
+    else
+        echo -e "\n\e[1mTask not found: $1\e[0m"
+        display_task_more_help "$task_script"
+    fi
 fi
 
 echo -e "\n\e[1mCleanup process completed.\e[0m"
