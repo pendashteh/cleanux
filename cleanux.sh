@@ -14,25 +14,18 @@ execute_cleanup_step() {
     echo
 }
 
-# Step 1: Remove Unnecessary Packages
-execute_cleanup_step "Remove Unnecessary Packages" "remove_unnecessary_packages.sh"
+# Function to display help for a task
+display_task_help() {
+    local task_script=$1
+    
+    bash "$task_script" --help
+}
 
-# Step 2: Clear Package Cache
-execute_cleanup_step "Clear Package Cache" "clear_package_cache.sh"
-
-# Step 3: Remove Old Kernels
-execute_cleanup_step "Remove Old Kernels" "remove_old_kernels.sh"
-
-# Step 4: Clean Up APT Cache
-execute_cleanup_step "Clean Up APT Cache" "clean_up_apt_cache.sh"
-
-# Step 5: Remove Orphaned Packages
-execute_cleanup_step "Remove Orphaned Packages" "remove_orphaned_packages.sh"
-
-# Step 6: Clean Up Old Configuration Files
-execute_cleanup_step "Clean Up Old Configuration Files" "clean_up_old_config_files.sh"
-
-# Step 7: Remove Unused Packages and Configuration Files
-execute_cleanup_step "Remove Unused Packages and Configuration Files" "remove_unused_packages.sh"
+# Find all task files with pattern "*.task.sh" and execute them
+for task_script in *.task.sh; do
+    if [[ -f "$task_script" ]]; then
+        execute_cleanup_step "$(basename "$task_script" .task.sh)" "$task_script"
+    fi
+done
 
 echo "Cleanup process completed."
